@@ -1,0 +1,85 @@
+<%- include('../partials/head') %>
+</head>
+<body class="bg-gray-50">
+<%- include('../partials/nav') %>
+  <main class="container mx-auto px-4 py-8 mt-10">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-800">Your Listed Properties</h2>
+        <a href="/host/add-home" class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          Add New Property
+        </a>
+      </div>
+   
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <% registeredHomes.forEach(home => { %>
+          <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100">
+            <div class="relative">
+              <img 
+                src="<%= home.photoUrl %>" 
+                alt="<%= home.houseName %>" 
+                class="w-full h-72 object-cover transition-transform duration-300 hover:scale-105"
+              >
+              <div class="absolute top-4 right-4 flex space-x-2">
+                <a 
+                  href="/host/edit-home/<%=home._id%>?editing=true" 
+                  class="inline-flex items-center p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-gray-700 hover:text-gray-900 group"
+                >
+                  <svg class="w-5 h-5 transform group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                  </svg>
+                </a>
+                <form action="/host/delete-home/<%= home._id %>" method="post" class="inline">
+                  <button 
+                    type="submit" 
+                    class="inline-flex items-center p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-red-500 hover:text-red-600 group"
+                    onclick="return confirm('Are you sure you want to delete this property?')"
+                  >
+                    <svg class="w-5 h-5 transform group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div class="p-6 space-y-4">
+              <div class="flex justify-between items-start">
+                <h3 class="text-2xl font-semibold text-gray-800"><%= home.houseName %></h3>
+                <div class="flex items-center bg-yellow-100 px-3 py-1 rounded-full">
+                  <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span class="ml-1 font-medium text-yellow-700"><%= home.rating %>/5</span>
+                </div>
+              </div>
+              
+              <div class="flex items-center text-gray-600">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <%= home.location %>
+              </div>
+
+              <div class="flex justify-between items-end">
+                <div>
+                  <p class="text-3xl font-bold text-gray-800">$<%= home.price %></p>
+                  <p class="text-sm text-gray-600">per night</p>
+                </div>
+                <a href="/host/edit-home/<%=home._id%>?editing=true" 
+                   class="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-200 shadow-sm hover:shadow-md">
+                  View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div></svg>
+   </main>
+   
+  </body>
+ </html>
