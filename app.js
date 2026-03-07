@@ -5,7 +5,9 @@
  const express = require('express');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
-const DB_PATH = "mongodb+srv://root:root@completecoding.ma2bun5.mongodb.net/airbnb?retryWrites=true&w=majority&appName=CompleteCoding";
+const DB_PATH = "mongodb+srv://root:root@copmpletecoding.ma2bun5.mongodb.net/?appName=CopmpleteCoding";
+//"mongodb+srv://root:root@completecoding.ma2bun5.mongodb.net/airbnb?retryWrites=true&w=majority&appName=CompleteCoding";
+
 
 
 
@@ -19,8 +21,8 @@ const DB_PATH = "mongodb+srv://root:root@completecoding.ma2bun5.mongodb.net/airb
 const { default: mongoose } = require('mongoose');
 
 
-const app = express();
-
+const app = express(); 
+ 
 
  app.set('view engine', 'ejs');
  app.set('views', 'views');
