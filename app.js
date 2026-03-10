@@ -11,7 +11,6 @@ const DB_PATH = "mongodb+srv://root:root@copmpletecoding.ma2bun5.mongodb.net/?ap
 
 
 
-
  //local module
  const storeRouter = require("./routes/storeRouter");
  const hostRouter = require("./routes/hostRouter");
