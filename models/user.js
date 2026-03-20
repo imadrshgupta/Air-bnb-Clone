@@ -1,28 +1,66 @@
- const mongoose = require('mongoose') ;
-  const userSchema = mongoose.Schema({
-    firstName: {
-      type: String,
-      required: [true, 'First name is required']
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
+
+const User = sequelize.define(
+  "User",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    lastName : String,
+
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
     email: {
-      type: String,
-      required: [true, 'Last name is required'],
-      unique: true
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
     },
+
     password: {
-      type: String,
-      required: [true, 'password is required']
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    userType: {
-      type: String,
-      enum: ['guest', 'host'],
-      default: 'guest'
+
+    role: {
+      type: DataTypes.ENUM("guest", "host", "admin"),
+      defaultValue: "guest",
     },
-    favourites: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Home'
-    }]
+
+    phone: DataTypes.STRING,
+    profile_image: DataTypes.STRING,
+  },
+  {
+    tableName: "users",
+    timestamps: true,
+  },
+);
+
+User.associate = (models) => {
+  // Host -> Properties
+  User.hasMany(models.Property, {
+    foreignKey: "host_id",
   });
 
-  module.exports = mongoose.model('User', userSchema);
+  //Guest -> booking
+  User.hasMany(models.Booking, {
+    foreignKey: "guest_id",
+  });
+
+  //user -> reviews
+  User.hasMany(models.Review, {
+    foreignKey: "user_id",
+  });
+
+  //wishlist
+  User.belongsToMany(models.Property, {
+    through: models.Wishlist,
+    foreignKey: "user_id",
+  });
+};
+
+module.exports = User;

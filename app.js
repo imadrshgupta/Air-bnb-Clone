@@ -1,21 +1,48 @@
- require('dotenv').config();
-  
-  // core modules 
- const path = require('path');
+require("dotenv").config();
+const express = require("express");
 
- //external module
- const express = require('express');
- const pool = require("./config/database");
- const cors = require("cors");
- const PORT = process.env.PORT || 4000; 
- const app = express(); 
+const { sequelize, connectDB } = require("./config/database");
+
+const PORT = process.env.PORT || 4000;
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  console.log("end");
+  res.send(" airbnb backend running");
+});
+
+//proper server start lifecycle
+async function startServer() {
+  try {
+    //connect DB
+    await connectDB();
+
+    //sync models
+    await sequelize.sync({ alter: true });
+    console.log(" models synced");
+
+    //start server
+    app.listen(PORT, () => {
+      console.log(`server running at http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.log("server start error", err);
+  }
+}
+
+startServer();
+
+// // core modules
+// const path = require("path");
+//const cors = require("cors");
 // const session = require('express-session');
 // const MongoDBStore = require('connect-mongodb-session')(session);
 // const DB_PATH = "mongodb+srv://root:root@copmpletecoding.ma2bun5.mongodb.net/?appName=CopmpleteCoding";
 // //"mongodb+srv://root:root@completecoding.ma2bun5.mongodb.net/airbnb?retryWrites=true&w=majority&appName=CompleteCoding";
-
-
-
 
 //  //local module
 //  const storeRouter = require("./routes/storeRouter");
@@ -33,9 +60,7 @@
 //   collection: 'sessions'
 //  })
 
- app.use(express.urlencoded({ extended: true})); 
- app.use(express.json());
- app.use(cors()); 
+//app.use(cors());
 
 //  app.use(session({
 //   secret: " knowledge gate with ai",
@@ -43,7 +68,6 @@
 //   saveUninitialized: true,
 //   store : store
 //  }));
-
 
 //  app.use((req,res,next) => {
 //   req.isLoggedIn = req.session.isLoggedIn;
@@ -64,17 +88,6 @@
 
 // app.use(express.static(path.join(rootDir, 'public')));
 
-
 //  app.use(errorController.useError);
 
 // TESTING Pg Connection
-app.get("/", async (req, res) => {
-    const result = await pool.query("SELECT current_database()");
-    console.log("end");
-    res.send(`The db name is : ${ result.rows[0].current_database}`)
-})
-
- app.listen(PORT, () =>{
- console.log(`server running at http://localhost:${PORT}`);
- 
-});
